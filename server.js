@@ -276,13 +276,12 @@ const path = require('path');
 // Frontend yig'ilgan build papkasini static fayl sifatida ulash
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 
-// Har qanday boshqa so'rov kelganda React-ning index.html faylini qaytarish
+// Har qanday boshqa so'rov kelganda React-ning index.html faylini qaytarish (Express 5 versiya uchun to'g'ri variant)
 app.get('*', (req, res, next) => {
   if (req.originalUrl.startsWith('/api')) return next();
   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
-// ==========================================
 
-// Serverni ishga tushirish (Render portni o'zi berishi uchun process.env.PORT qo'shildi)
+// Serverni faqat BITTA joyda ishga tushirish
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`CareTrack server ${PORT}-portda ishlamoqda`));
