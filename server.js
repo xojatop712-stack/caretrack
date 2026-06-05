@@ -271,5 +271,17 @@ app.get('/api/stats', authMiddleware, (req, res) => {
     recent_patients: db.prepare('SELECT p.*, d.first_name || " " || d.last_name as doctor_name FROM patients p LEFT JOIN doctors d ON p.doctor_id = d.id ORDER BY p.created_at DESC LIMIT 5').all()
   });
 });
+const path = require('path');
 
-app.listen(5000, () => console.log('CareTrack server 5000-portda ishlamoqda'));
+// Frontend yig'ilgan build papkasini static fayl sifatida ulash
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+// Har qanday boshqa so'rov kelganda React-ning index.html faylini qaytarish
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+});
+// ==========================================
+
+// Serverni ishga tushirish (Render portni o'zi berishi uchun process.env.PORT qo'shildi)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`CareTrack server ${PORT}-portda ishlamoqda`));
